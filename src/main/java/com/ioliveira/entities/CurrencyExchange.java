@@ -12,4 +12,5 @@ public class CurrencyExchange {
     private String from;
     private String to;
     private Integer conversionMultiple;
+    private int port;
 }
