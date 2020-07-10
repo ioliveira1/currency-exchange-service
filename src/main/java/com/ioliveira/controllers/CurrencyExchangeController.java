@@ -1,6 +1,7 @@
 package com.ioliveira.controllers;
 
 import com.ioliveira.entities.CurrencyExchange;
+import com.ioliveira.services.CurrencyExchangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +18,14 @@ public class CurrencyExchangeController {
 
     @Autowired
     private Environment environment;
+    @Autowired
+    private CurrencyExchangeService service;
 
     @GetMapping(path = "/{from}/{to}")
     public ResponseEntity<CurrencyExchange> getExchangeValue(@PathVariable String from, @PathVariable String to) {
-        CurrencyExchange exchange = CurrencyExchange
-                .builder()
-                .id(10L)
-                .from(from)
-                .to(to)
-                .conversionMultiple(65)
-                .port(Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port"))))
-                .build();
-
-        return ResponseEntity.ok(exchange);
+        CurrencyExchange currencyExchange = service.getCurrency(from, to);
+        currencyExchange.setPort(Integer.parseInt(Objects.requireNonNull(environment.getProperty("local.server.port"))));
+        return ResponseEntity.ok(currencyExchange);
     }
 
 }
